@@ -22,13 +22,13 @@ ar -xv shim-signed_1.45.deb && tar -xvf data.tar.xz && mv usr/lib/shim/shimx64.e
 
 2. Use the refind-install script to install the new shim binary and sign the drivers with local keys
 
-`$ refind-install --usedefault /dev/sdXY --shim shimx64.efi --localkeys`
+`refind-install --usedefault /dev/sdXY --shim shimx64.efi --localkeys`
 
 where sdX is the device and Y is the partition number for the ESP
 
 3. Sign the kernel with the same keys
 
-`$ sbsign --key /etc/refind.d/keys/refind_local.key --cert /etc/refind.d/keys/refind_local.crt --output /boot/vmlinuz-linux-zen /boot/vmlinuz-linux-zen`
+`sbsign --key /etc/refind.d/keys/refind_local.key --cert /etc/refind.d/keys/refind_local.crt --output /boot/vmlinuz-linux-zen /boot/vmlinuz-linux-zen`
 
 4. Enroll the key in MOK Manager the next time you boot. It can be found in *ESP*/EFI/BOOT/refind/keys/refind_local.cer
 
@@ -38,16 +38,16 @@ where sdX is the device and Y is the partition number for the ESP
 You may have to create these folders if they don't exist:
 
 ```console
-$ mkdir /etc/pacman.d/hooks
-$ mkdir -p /usr/local/share/libalpm/scripts
+ mkdir /etc/pacman.d/hooks
+ mkdir -p /usr/local/share/libalpm/scripts
 
 ```
 
 1. Copy these files:
 
 ```console
-$ cp /usr/share/libalpm/hooks/90-mkinitcpio-install.hook /etc/pacman.d/hooks/90-mkinitcpio-install.hook
-$ cp /usr/share/libalpm/scripts/mkinitcpio-install /usr/local/share/libalpm/scripts/mkinitcpio-install
+ cp /usr/share/libalpm/hooks/90-mkinitcpio-install.hook /etc/pacman.d/hooks/90-mkinitcpio-install.hook
+ cp /usr/share/libalpm/scripts/mkinitcpio-install /usr/local/share/libalpm/scripts/mkinitcpio-install
 ```
 
 2. In `/etc/pacman.d/hooks/90-mkinitcpio-install.hook`, replace:
@@ -61,11 +61,11 @@ with
 
 3. In `/usr/local/share/libalpm/scripts/mkinitcpio-install`, replace:
 
-`install -Dm644 "${line}" "/boot/vmlinuz-${pkgbase}`
+`install -Dm644 "{line}" "/boot/vmlinuz-${pkgbase}`
 
 with
 
-`sbsign --key /etc/refind.d/keys/refind_local.key --cert /etc/refind.d/keys/refind_local.crt --output "/boot/vmlinuz-${pkgbase}" "${line}"`
+`sbsign --key /etc/refind.d/keys/refind_local.key --cert /etc/refind.d/keys/refind_local.crt --output "/boot/vmlinuz-{pkgbase}" "${line}"`
 
 ## References
 
