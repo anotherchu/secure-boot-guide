@@ -12,7 +12,7 @@ This article will attempt to workaround this by installing an earlier version of
 
 ## Steps
 
-1. Extract the shimx64.efi binary from the shim-signed package from Ubuntu launchpad
+Extract the shimx64.efi binary from the shim-signed package from Ubuntu launchpad:
 
 ```console
 mkdir shim-signed && cd shim-signed && \
@@ -20,7 +20,7 @@ curl http://launchpadlibrarian.net/502909051/shim-signed_1.45+15+1552672080.a4a1
 ar -xv shim-signed_1.45.deb && tar -xvf data.tar.xz && mv usr/lib/shim/shimx64.efi.dualsigned shimx64.efi
 ```
 
-2. Use the refind-install script to install the new shim binary and sign the drivers with local keys
+Use the refind-install script to install the new shim binary and sign the drivers with local keys:
 
 ```console
 refind-install --usedefault /dev/sdXY --shim shimx64.efi --localkeys
@@ -28,15 +28,15 @@ refind-install --usedefault /dev/sdXY --shim shimx64.efi --localkeys
 
 where sdX is the device and Y is the partition number for the ESP
 
-3. Sign the kernel with the same keys
+Sign the kernel with the same keys:
 
 ```console
 sbsign --key /etc/refind.d/keys/refind_local.key --cert /etc/refind.d/keys/refind_local.crt --output /boot/vmlinuz-linux-zen /boot/vmlinuz-linux-zen
 ```
 
+You should replace `vmlinuz-linux-zen` with your kernel image.
 
-4. Enroll the key in MOK Manager the next time you boot. It can be found in *ESP*/EFI/BOOT/refind/keys/refind_local.cer
-
+Then, enroll the key in MOK Manager the next time you boot. It can be found in *ESP*/EFI/BOOT/refind/keys/refind_local.cer
 
 ## Automatically sign the kernel when it updates
 
@@ -47,14 +47,14 @@ mkdir /etc/pacman.d/hooks
 mkdir -p /usr/local/share/libalpm/scripts
 ```
 
-1. Copy these files:
+Copy these files:
 
 ```console
 cp /usr/share/libalpm/hooks/90-mkinitcpio-install.hook /etc/pacman.d/hooks/90-mkinitcpio-install.hook
 cp /usr/share/libalpm/scripts/mkinitcpio-install /usr/local/share/libalpm/scripts/mkinitcpio-install
 ```
 
-2. In `/etc/pacman.d/hooks/90-mkinitcpio-install.hook`, replace:
+In `/etc/pacman.d/hooks/90-mkinitcpio-install.hook`, replace:
 
 `Exec = /usr/share/libalpm/scripts/mkinitcpio-install`
 
@@ -63,7 +63,7 @@ with
 `Exec = /usr/local/share/libalpm/scripts/mkinitcpio-install`
 
 
-3. In `/usr/local/share/libalpm/scripts/mkinitcpio-install`, replace:
+In `/usr/local/share/libalpm/scripts/mkinitcpio-install`, replace:
 
 `install -Dm644 "{line}" "/boot/vmlinuz-${pkgbase}`
 
