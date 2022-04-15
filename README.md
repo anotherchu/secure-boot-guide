@@ -73,7 +73,7 @@ with
 
 ## References
 
-1. [Unified_Extensible_Firmware_Interface/Secure_Boot#Signing_the_kernel_with_a_pacman_hook](Unified_Extensible_Firmware_Interface/Secure_Boot#Signing_the_kernel_with_a_pacman_hook)
+1. [Unified_Extensible_Firmware_Interface/Secure_Boot#Signing_the_kernel_with_a_pacman_hook](https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Signing_the_kernel_with_a_pacman_hook)
 2. [A solution to rEFInd unable to load using shim when Secure Boot is enabled](https://dev.to/hollowman6/a-solution-to-refind-unable-to-load-using-shim-when-secure-boot-is-enabled-1e8l)
 3. [REFInd#Secure_Boot](https://wiki.archlinux.org/title/REFInd#Secure_Boot)
 
