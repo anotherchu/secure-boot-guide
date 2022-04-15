@@ -17,7 +17,7 @@ This article will attempt to workaround this by installing an earlier version of
 ```console
 mkdir shim-signed && cd shim-signed && \
 curl http://launchpadlibrarian.net/502909051/shim-signed_1.45+15+1552672080.a4a1fbe-0ubuntu2_amd64.deb --output shim-signed_1.45.deb && \
-ar shim-signed_1.45.deb && tar -xvf data.tar.xz && mv usr/lib/shim/shimx64.efi.dualsigned shimx64.efi
+ar -xv shim-signed_1.45.deb && tar -xvf data.tar.xz && mv usr/lib/shim/shimx64.efi.dualsigned shimx64.efi
 ```
 
 2. Use the refind-install script to install the new shim binary and sign the drivers with local keys
