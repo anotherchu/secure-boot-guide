@@ -7,20 +7,26 @@ This article will attempt to workaround this by installing an earlier version of
 
 ## Pre-requisites
 
-* [A compatible shimx64.efi binary for rEFInd](http://launchpadlibrarian.net/502909051/shim-signed_1.45+15+1552672080.a4a1fbe-0ubuntu2_amd64.deb)
 * [sbsigntools](https://archlinux.org/packages/?name=sbsigntools)
 
 ## Steps
 
-Extract the shimx64.efi binary from the shim-signed package from Ubuntu launchpad:
+Extract the MOK Manager binary from the **shim** package from Ubuntu launchpad:
 
 ```console
-mkdir shim-signed && cd shim-signed && \
+mkdir shim && cd shim && curl http://launchpadlibrarian.net/469850621/shim_15+1552672080.a4a1fbe-0ubuntu2_amd64.deb  --output shim_15.deb && \
+ar -x shim_15.deb data.tar.xz && tar -xf data.tar.xz && mv usr/lib/shim/mmx64.efi ./
+
+```
+Extract the shimx64.efi binary from the **shim-signed** package from Ubuntu launchpad:
+
+```console
 curl http://launchpadlibrarian.net/502909051/shim-signed_1.45+15+1552672080.a4a1fbe-0ubuntu2_amd64.deb --output shim-signed_1.45.deb && \
-ar -xv shim-signed_1.45.deb && tar -xvf data.tar.xz && mv usr/lib/shim/shimx64.efi.dualsigned shimx64.efi
+ar -x shim-signed_1.45.deb data.tar.xz && tar -xf data.tar.xz && mv usr/lib/shim/shimx64.efi.dualsigned shimx64.efi
 ```
 
 Use the refind-install script to install the new shim binary and sign the drivers with local keys:
+
 
 ```console
 refind-install --usedefault /dev/sdXY --shim shimx64.efi --localkeys
@@ -36,7 +42,20 @@ sbsign --key /etc/refind.d/keys/refind_local.key --cert /etc/refind.d/keys/refin
 
 You should replace `vmlinuz-linux-zen` with your kernel image.
 
+
 Then, enroll the key in MOK Manager the next time you boot. It can be found in *ESP*/EFI/BOOT/refind/keys/refind_local.cer
+
+**NOTE:** If MOK Manager does not load because it was not found the next time you boot, copy *mmx64.efi* directly into the *ESP*:
+
+```console
+cp /path/to/shim/mmx64.efi *ESP*/EFI/BOOT/
+```
+
+After succesfully setting Secure Boot, cleanup the files we created:
+
+```console
+rm -rf /path/to/shim/
+```
 
 ## Automatically sign the kernel when it updates
 
